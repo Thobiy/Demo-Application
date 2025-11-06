@@ -1,6 +1,6 @@
 // src/middleware/errorHandler.js
 
-import AppError from "../utils/appError.js";
+import AppError from "../utils/AppError.js";
 import { APP_CONFIG } from "../config/config.js";
 const logger = (APP_CONFIG && APP_CONFIG.LOGGER) ? APP_CONFIG.LOGGER : console;
 
