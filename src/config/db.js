@@ -6,17 +6,31 @@ import { Logger } from "./logger.js";
 export const sequelize = new Sequelize(ENV.DB_NAME, ENV.DB_USER, ENV.DB_PASS, {
   host: ENV.DB_HOST,
   port: ENV.DB_PORT,
-  dialect: "mysql",
-  logging: false
+  dialect: "postgres",
+
+  //dialect: "mysql",
+  logging: false,
+
+  
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false, 
+    }
+  }
+
 });
+
+
+
 
 export async function connectDatabase() {
   try {
     await sequelize.authenticate();
     await sequelize.sync({ alter: true });
-    Logger.info("MySQL connected & synchronized");
+    Logger.info("postgreSQL connected & synchronized");
   } catch (err) {
-    Logger.error("MySQL connection failed:", err);
+    Logger.error("PostgreSQL connection failed:", err);
     throw err;
   }
 }

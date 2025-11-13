@@ -31,6 +31,9 @@ async function seed() {
        userId: user.id, 
        age: 35, 
        gender: "male", 
+       weight: 70.5,
+       height: 175.0,
+      activityLevel: "Moderately Active",
        allergies: "nuts,shrimp", 
        conditions: "Diabetes", 
        dietaryGoal: "low-sugar" });

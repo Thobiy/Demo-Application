@@ -13,6 +13,7 @@ const User = sequelize.define("User", {
   role: { type: DataTypes.STRING, defaultValue: "user" }
 }, 
 
+
 { tableName: "users", timestamps: true });
 
 export default User;

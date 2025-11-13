@@ -18,11 +18,15 @@ export const ENV = {
   SMTP_HOST: process.env.SMTP_HOST || "smtp.gmail.com",
   SMTP_PORT: Number(process.env.SMTP_PORT) || 587,
   SMTP_SECURE: process.env.SMTP_SECURE === "true",
-  SMTP_USER: process.env.SMTP_USER || "",
+  //SMTP_USER: process.env.SMTP_USER || "",
   SMTP_PASS: process.env.SMTP_PASS || "",
   JWT_SECRET: process.env.JWT_SECRET || "supersecretjwt",
-  FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:4000"
-
+  FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:4000",
+  JWT_OTP_SECRET: process.env.JWT_OTP_SECRET,
+  
+  // SMTP / SendGrid
+  SMTP_USER: process.env.SMTP_USER, 
+  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY || "",
 
 };
 
@@ -44,19 +48,19 @@ export const APP_CONFIG = {
       // dynamic imports to avoid circular deps
       const { Logger } = await import("./logger.js");
       const { sequelize, connectDatabase } = await import("./db.js");
-      const { redisClient, connectRedis } = await import("./redis.js");
-      const { transporter, verifyMailer } = await import("./mailer.js");
-
+     // const { redisClient, connectRedis } = await import("./redis.js");
+      //const { transporter, verifyMailer } = await import("./mailer.js");
+      const { transporter } = await import("./mailer.js");
       // set handles
       this.LOGGER = Logger;
       this.DB = sequelize;
-      this.REDIS = redisClient;
+      //this.REDIS = redisClient;
       this.MAILER = transporter;
 
       // connect (will throw on failure)
       await connectDatabase();
-      await connectRedis();
-      await verifyMailer();
+      //await connectRedis();
+      //await verifyMailer();
 
       this.LOGGER.info("APP_CONFIG.init: All systems initialized");
     } catch (err) {

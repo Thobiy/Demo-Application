@@ -1,22 +1,20 @@
 // src/config/mailer.js
-import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 import { ENV } from "./config.js";
 import { Logger } from "./logger.js";
 
-export const transporter = nodemailer.createTransport({
-  host: ENV.SMTP_HOST,
-  port: ENV.SMTP_PORT,
-  secure: ENV.SMTP_SECURE,
-  auth: { user: ENV.SMTP_USER, pass: ENV.SMTP_PASS }
-});
+// Set API key from config
+sgMail.setApiKey(ENV.SENDGRID_API_KEY);
 
-export async function verifyMailer() {
-  try {
-    await transporter.verify();
-    Logger.info("SMTP mailer verified");
-  } catch (err) {
-    Logger.error("Mailer verification failed:", err);
-    throw err;
+// Export a “mailer” object with sendMail(), like Nodemailer
+export const transporter = {
+  async sendMail({ to, subject, text, html }) {
+    try {
+      await sgMail.send({ to, from: ENV.SMTP_USER, subject, text, html });
+      Logger.info(`Email sent to ${to} subject=${subject}`);
+    } catch (err) {
+      Logger.error("SendGrid error:", err);
+      throw err;
+    }
   }
-}
-
+};

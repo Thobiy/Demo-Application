@@ -2,7 +2,7 @@
 
 import { HealthProfile, HealthCondition, Meal } from "../models/index.js";
 import { cacheService } from "./cacheService.js";
-import AppError from "../utils/AppError.js";
+import AppError from "../Utils/AppError.js";
 
 export const recommendationService = {
   async getForUser(userId) {

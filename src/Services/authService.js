@@ -2,13 +2,13 @@
 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import AppError from  "../utils/AppError.js";
+import AppError from  "../Utils/AppError.js";
 import { User, OTP } from "../models/index.js";
 import { sendEmail } from "./emailService.js";
 import { APP_CONFIG } from "../config/config.js";
 
-const genOtp = () => Math.floor(100000 + Math.random()*900000).toString();
-//const genOtp = () => "123456"; // fixed OTP for testing
+//const genOtp = () => Math.floor(100000 + Math.random()*900000).toString();
+const genOtp = () => Math.floor(100000 + Math.random()*900000);
 
 
 export const authService = {
@@ -26,14 +26,59 @@ export const authService = {
     return { id: user.id, email: user.email };
   },
 
+
+   // // Resend otp - for resend cases
+  // async resendOtp(userId) {
+  //   const user = await User.findByPk(userId);
+  //   if (!user) throw new AppError("User not found", 404);
+
+  //   const code = genOtp();
+  //   const expiresAt = new Date(Date.now() + 15*60*1000);
+
+  //   await OTP.create({ userId: user.id, email: user.email, code, purpose: "verify", expiresAt });
+
+  //   await sendEmail({ to: user.email, subject: "Nutrismart OTP", text: `Your verification code: ${code}` });
+
+  //   return { message: "OTP resent successfully" };
+  // },
+  
+  async resendOtp(email) {
+  const user = await User.findOne({ where: { email }});
+  if (!user) throw new AppError("User not found", 404);
+
+  const code = genOtp();
+  const expiresAt = new Date(Date.now() - 10 * 60 * 1000);
+
+  await OTP.create({
+    userId: user.id,
+    email: user.email,
+    code,
+    purpose: "verify",
+    expiresAt
+  });
+
+  await sendEmail({
+    to: user.email,
+    subject: "Nutrismart OTP",
+    text: `Your verification code: ${code}`
+  });
+
+  return { message: "OTP resent successfully" };
+},
+
+
   async verifyOtp({ email, code }) {
-    const otp = await OTP.findOne({ where: { email, code, consumed: false }});
+    const otp = await OTP.findOne({ where: { email, code: Number(code), consumed: false }});
+    console.log("Received OTP:", code);
+    console.log("OTP in DB:", otp);
     if (!otp || new Date() > otp.expiresAt) throw new AppError("Invalid or expired OTP", 400);
     otp.consumed = true; await otp.save();
     await User.update({ verified: true }, { where: { email }});
     return true;
   },
 
+  
+ 
   async login({ email, password }) {
     const user = await User.findOne({ where: { email }});
     if (!user) throw new AppError("Invalid credentials", 400);

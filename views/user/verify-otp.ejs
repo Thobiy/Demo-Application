@@ -1,32 +1,36 @@
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8"/>
-    <title>Register</title>
-    <link rel="stylesheet" href="/css/style.css">
-  </head>
+<head>
+  <meta charset="utf-8"/>
+  <title>Verify OTP</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-  <header>
-    <a href="/">Nutrismart</a>
-  </header>
+<header>
+  <a href="/">Nutrismart</a>
+</header>
 
-  <main class="card">
-    <h2>Verify OTP</h2>
+<main class="card">
+  <h2>Verify OTP</h2>
 
-    <% if (message) { %>
-      <div class="error"><%= message %></div>
-    <% } %>
+  <% if (message) { %>
+    <div class="error"><%= message %></div>
+  <% } %>
 
-    <form method="POST" action="/auth/verify-otp">
-      <label>Email</label>
-      <input type="email" name="email" placeholder="Email" value="<%= email || '' %>" required />
+  <form method="POST" action="/auth/verify-otp">
+    <label>Email</label>
+    <input type="email" name="email" value="<%= email || '' %>" required />
 
-      <label>OTP Code</label>
-      <input type="text" name="code" placeholder="Enter OTP" required />
+    <label>OTP Code</label>
+    <input type="text" name="code" placeholder="Enter OTP" required />
 
-      <button type="submit">Verify</button>
-    </form>
-  </main>
+    <button type="submit">Verify</button>
+  </form>
+
+  <form method="POST" action="/auth/resend-otp">
+    <input type="hidden" name="email" value="<%= email %>"/>
+    <button type="submit" class="secondary-btn">Resend OTP</button>
+  </form>
+</main>
 </body>
 </html>
