@@ -1,5 +1,5 @@
 // src/controllers/userHealthConditionController.js
-import userHealthConditionService from "../services/userHealthConditionService.js";
+import userHealthConditionService from "../Services/userHealthConditionService.js";
 
 const userHealthConditionController = {
   setUserHealthConditions: async (req, res) => {

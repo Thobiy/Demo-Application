@@ -1,5 +1,5 @@
 // src/controllers/userAllergyController.js
-import userAllergyService from "../services/userAllergyService.js";
+import userAllergyService from "../Services/userAllergyService.js";
 
 const userAllergyController = {
   setUserAllergies: async (req, res) => {

@@ -1,5 +1,5 @@
 // src/controllers/userDietaryController.js
-import userDietaryService from "../services/userDietaryService.js";
+import userDietaryService from "../Services/userDietaryService.js";
 
 const userDietaryController = {
   setUserDietaryPreferences: async (req, res) => {
