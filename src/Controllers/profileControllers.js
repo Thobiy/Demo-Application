@@ -1,5 +1,5 @@
 // src/controllers/profileController.js
-import { profileService } from "../services/profileService.js";
+import { profileService } from "../Services/profileService.js";
 
 export const createOrUpdate = async (req, res) => {
   try {
